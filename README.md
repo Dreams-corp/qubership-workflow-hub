@@ -44,7 +44,7 @@ Below is the short description of how to implement common workflows in any Netcr
 | Name                          | Purpose                                                                              |
 | ----------------------------- | ------------------------------------------------------------------------------------ |
 | secrets.CLA_ACCESS_TOKEN      | Used by CLA workflow to access cla storage                                           |
-| secrets.MAVEN_USER            | Username to authenticate in Maven Central repository to publish released artifacts  |
+| secrets.MAVEN_USER            | Username to authenticate in Maven Central repository to publish released artifacts   |
 | secrets.MAVEN_PASSWORD        | User token to authenticate in Maven Central repository to publish released artifacts |
 | secrets.MAVEN_GPG_PRIVATE_KEY | GPG private key to sign artefacts (jar, pom etc) to publish them into Maven Central  |
 | secrets.MAVEN_GPG_PASSPHRASE  | GPG private key passphrase                                                           |
@@ -101,7 +101,7 @@ Create a new workflow in your repository. Copy the [prepared file](https://githu
 
 #### Step 2: Add configuration file
 
-Create a new configuration file `.github/auto-labeler-config.yaml`. Copy [prepared file](./docs/examples/auto-labeler-config.yaml)  into `.github` directory of your repository.
+Create a new configuration file `.github/auto-labeler-config.yaml`. Copy [prepared file](./docs/examples/auto-labeler-config.yaml) into `.github` directory of your repository.
 
 #### Step 3: Follow the conventional commits messages strategy
 
