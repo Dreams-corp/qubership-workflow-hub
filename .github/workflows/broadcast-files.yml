@@ -4,7 +4,7 @@ on:
     inputs:
       repo_name:
         description: |
-          Target repository name. 
+          Target repository name.
           If not provided, the action will be triggered for all repositories in the organization.
         required: false
         type: string
