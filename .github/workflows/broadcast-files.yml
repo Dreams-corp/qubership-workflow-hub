@@ -2,6 +2,12 @@ name: Broadcast files to organization repositories
 on:
   workflow_call:
     inputs:
+      repo_name:
+        description: |
+          You can specify name of the repository where workflows should be pushed manually. As long as repository is not ignored by workflow settings.
+          If you do not specify exact repository name, the workflow will try to replicate all missing changes to all repositories.
+        required: false
+        type: string
       replicate-common-workflows:
         description: 'Replicate common workflows'
         required: false
