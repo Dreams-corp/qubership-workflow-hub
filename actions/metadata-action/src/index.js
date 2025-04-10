@@ -27,15 +27,14 @@ function extractSemverParts(versionString) {
   return { major, minor, patch };
 }
 
-
 // function matchesPattern(refName, pattern) {
 //   const regex = new RegExp('^' + pattern.replace(/\*/g, '.*') + '$');
 //   return regex.test(refName);
 // }
 
 function matchesPattern(refName, pattern) {
-  const normalizedPattern = pattern.replace(/\//g, '-').replace(/\*/g, '.*');
-  const regex = new RegExp('^' + normalizedPattern + '$');
+  const normalizedPattern = pattern.replace(/\//g, "-").replace(/\*/g, ".*");
+  const regex = new RegExp("^" + normalizedPattern + "$");
   return regex.test(refName);
 }
 
@@ -62,7 +61,7 @@ function findDistTag(ref, distTags) {
   }
   for (let item of distTags) {
     let key = Object.keys(item)[0];
-    if (key.includes('*')) {
+    if (key.includes("*")) {
       if (matchesPattern(branchName, key)) {
         return item[key];
       }
@@ -84,11 +83,13 @@ function fillTemplate(template, values) {
 async function run() {
   // const def_template = core.getInput("default-template");
 
-  const name = core.getInput('ref') || github.context.ref;
+  const name = core.getInput("ref") || github.context.ref;
   const ref = new RefExtractor().extract(name);
 
-  const configurationPath = core.getInput('configuration-path') || "./.github/metadata-action-config.yml";
-  const loader = new ConfigLoader()
+  const configurationPath =
+    core.getInput("configuration-path") ||
+    "./.github/metadata-action-config.yml";
+  const loader = new ConfigLoader();
   const config = loader.load(configurationPath);
 
   core.info(`🔹 Ref: ${JSON.stringify(ref)}`);
@@ -97,17 +98,24 @@ async function run() {
   let distTag = null;
 
   if (loader.fileExists) {
-    template = findTemplate(!ref.isTag ? ref.name : "tag", config["branches-template"]);
+    template = findTemplate(
+      !ref.isTag ? ref.name : "tag",
+      config["branches-template"],
+    );
     distTag = findDistTag(ref, config["dist-tags"]);
   }
 
   if (template === null) {
-    core.warning(`💡 No template found for ref: ${ref.name}, will be used default -> {{ref-name}}-{{timestamp}}-{{runNumber}}`);
+    core.warning(
+      `💡 No template found for ref: ${ref.name}, will be used default -> {{ref-name}}-{{timestamp}}-{{runNumber}}`,
+    );
     template = `{{ref-name}}-{{timestamp}}-{{runNumber}}`;
   }
 
   if (distTag === null) {
-    core.warning(`💡 No dist-tag found for ref: ${ref.name}, will be used default -> latest`);
+    core.warning(
+      `💡 No dist-tag found for ref: ${ref.name}, will be used default -> latest`,
+    );
     distTag = "latest";
   }
 
@@ -116,18 +124,26 @@ async function run() {
   const semverParts = extractSemverParts(ref.name);
   const shortShaDeep = core.getInput("short-sha");
   const shortSha = github.context.sha.slice(0, shortShaDeep);
-  const values = { ...ref, "ref-name": ref.name, "short-sha": shortSha, ...semverParts, ...parts, ...github.context, distTag };
+  const values = {
+    ...ref,
+    "ref-name": ref.name,
+    "short-sha": shortSha,
+    ...semverParts,
+    ...parts,
+    ...github.context,
+    distTag,
+  };
 
   core.info(`🔹 time: ${JSON.stringify(parts)}`);
   core.info(`🔹 semver: ${JSON.stringify(semverParts)}`);
   core.info(`🔹 dist-tag: ${JSON.stringify(distTag)}`);
 
-  let result = fillTemplate(template, values)
+  let result = fillTemplate(template, values);
 
   core.info(`🔹 Template: ${template}`);
 
   let t = ref.name;
-  core.info(`🔹 Name: ${{ t }}`)
+  core.info(`🔹 Name: ${{ t }}`);
   core.info(`💡 Rendered template: ${result}`);
 
   core.setOutput("result", result);
@@ -142,7 +158,7 @@ async function run() {
   core.setOutput("tag", distTag);
   core.setOutput("short-sha", shortSha);
 
-  core.info('✅ Action completed successfully!');
+  core.info("✅ Action completed successfully!");
 }
 
 run();
