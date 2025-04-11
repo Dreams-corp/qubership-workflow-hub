@@ -1,7 +1,6 @@
 const github = require("@actions/github");
 
 class OctokitWrapper {
-
   /**
    * Initializes the OctokitWrapper with an authentication token.
    * @param {string} authToken - The GitHub authentication token.
@@ -17,8 +16,10 @@ class OctokitWrapper {
    */
   async isOrganization(username) {
     try {
-      const response = await this.octokit.rest.users.getByUsername({ username });
-      return response.data.type !== 'User' ? true : false;
+      const response = await this.octokit.rest.users.getByUsername({
+        username,
+      });
+      return response.data.type !== "User" ? true : false;
     } catch (error) {
       console.error(`Error fetching user ${username}:`, error);
       throw error;
@@ -33,7 +34,9 @@ class OctokitWrapper {
    * @returns {Promise<Array>} - A list of packages.
    */
   async listPackages(owner, package_type, type) {
-    return type ? this.listPackagesForOrganization(owner, package_type) : this.listPackagesForUser(owner, package_type);
+    return type
+      ? this.listPackagesForOrganization(owner, package_type)
+      : this.listPackagesForUser(owner, package_type);
   }
 
   /**
@@ -45,7 +48,13 @@ class OctokitWrapper {
    * @returns {Promise<Array>} - A list of package versions.
    */
   async listVersionsForPackage(owner, package_type, package_name, type) {
-    return type ? this.getPackageVersionsForOrganization(owner, package_type, package_name) : this.getPackageVersionsForUser(owner, package_type, package_name);
+    return type
+      ? this.getPackageVersionsForOrganization(
+          owner,
+          package_type,
+          package_name,
+        )
+      : this.getPackageVersionsForUser(owner, package_type, package_name);
   }
 
   /**
@@ -56,7 +65,11 @@ class OctokitWrapper {
    */
   async listPackagesForOrganization(org, package_type) {
     try {
-      const response = await this.octokit.rest.packages.listPackagesForOrganization({ org, package_type });
+      const response =
+        await this.octokit.rest.packages.listPackagesForOrganization({
+          org,
+          package_type,
+        });
       return response.data;
     } catch (error) {
       console.error(`Error fetching packages for organization ${org}:`, error);
@@ -72,7 +85,10 @@ class OctokitWrapper {
    */
   async listPackagesForUser(username, package_type) {
     try {
-      const response = await this.octokit.rest.packages.listPackagesForUser({ username, package_type });
+      const response = await this.octokit.rest.packages.listPackagesForUser({
+        username,
+        package_type,
+      });
       return response.data;
     } catch (error) {
       console.error(`Error fetching packages for user ${username}:`, error);
@@ -89,14 +105,20 @@ class OctokitWrapper {
    */
   async getPackageVersionsForUser(owner, package_type, package_name) {
     try {
-      const response = await this.octokit.rest.packages.getAllPackageVersionsForPackageOwnedByUser({
-        package_type,
-        package_name,
-        username: owner,
-      });
+      const response =
+        await this.octokit.rest.packages.getAllPackageVersionsForPackageOwnedByUser(
+          {
+            package_type,
+            package_name,
+            username: owner,
+          },
+        );
       return response.data;
     } catch (error) {
-      console.error(`Error fetching package versions for ${owner}/${package_name}:`, error);
+      console.error(
+        `Error fetching package versions for ${owner}/${package_name}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -110,14 +132,20 @@ class OctokitWrapper {
    */
   async getPackageVersionsForOrganization(org, package_type, package_name) {
     try {
-      const response = await this.octokit.rest.packages.getAllPackageVersionsForPackageOwnedByOrg({
-        package_type,
-        package_name,
-        org,
-      });
+      const response =
+        await this.octokit.rest.packages.getAllPackageVersionsForPackageOwnedByOrg(
+          {
+            package_type,
+            package_name,
+            org,
+          },
+        );
       return response.data;
     } catch (error) {
-      console.error(`Error fetching package versions for ${org}/${package_name}:`, error);
+      console.error(
+        `Error fetching package versions for ${org}/${package_name}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -131,7 +159,13 @@ class OctokitWrapper {
    * @param {boolean} type - True if the owner is an organization, false if it's a user.
    * @returns {Promise<void>}
    */
-  async deletePackageVersion(owner, package_type, package_name, package_version_id, type) {
+  async deletePackageVersion(
+    owner,
+    package_type,
+    package_name,
+    package_version_id,
+    type,
+  ) {
     try {
       if (type) {
         await this.octokit.rest.packages.deletePackageVersionForOrg({
@@ -149,11 +183,13 @@ class OctokitWrapper {
         });
       }
     } catch (error) {
-      console.error(`Error deleting package version ${package_version_id} for ${owner}/${package_name}:`, error);
+      console.error(
+        `Error deleting package version ${package_version_id} for ${owner}/${package_name}:`,
+        error,
+      );
       throw error;
     }
   }
-
 }
 
 module.exports = OctokitWrapper;
