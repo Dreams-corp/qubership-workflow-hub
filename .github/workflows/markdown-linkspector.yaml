@@ -1,20 +1,21 @@
 # This is a GitHub Actions workflow template for running Linkspector on Markdown files.
 # It is triggered on pull requests that modify Markdown files.
 # The workflow checks for broken links in the Markdown files using the Linkspector action.
-name: Linkspector for Markdown Files
+name: Check Markdown links
 on:
-  pull_request:
+  push:
     paths:
       - '**/*.md'
+  workflow_dispatch:
+
 jobs:
-  check-links:
-    name: runner / linkspector
+  markdown-link-check:
+    name: Link-inspect
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Run linkspector
-        uses: umbrelladocs/action-linkspector@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: web-flow
-          fail_on_error: true
+    - uses: actions/checkout@v4
+    - uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        use-quiet-mode: 'yes'
+        use-verbose-mode: 'yes'
+
