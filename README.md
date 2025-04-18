@@ -159,7 +159,7 @@ Maven project release workflow is used to make a GitHub release and publish rele
 The workflow consists of several sequential jobs:
 
 1. Checks if the tag already exists.
-2. [Updates the version in the pom.xml file](./docs/reusable/pomupdater.md)
+2. [Updates the version in the pom.xml file](./docs/reusable/pom-updater.md)
 3. Commits the changes to the repository.
 4. Builds the project using Maven.
 5. Runs tests.
@@ -245,7 +245,7 @@ The workflow consists of several sequential jobs:
 1. Checks if the tag already exists.
 2. Ceates a new tag with name "v${version}.
 3. [Builds and publishes a Docker image](./docs/reusable/docker-publish.md).
-4. [Create GitHub release](./docs/reusable/create-github-release.md)
+4. [Create GitHub release](./docs/reusable/github-release.md)
 
 ---
 
