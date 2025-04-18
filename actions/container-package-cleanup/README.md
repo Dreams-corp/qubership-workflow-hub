@@ -16,13 +16,13 @@ The primary result of this action is the deletion of old container package versi
 
 ## 📌 Inputs
 
-| Name               | Description                                                                 | Required | Default                     |
-| ------------------ | --------------------------------------------------------------------------- | -------- | --------------------------- |
-| `threshold-days`   | The number of days to keep container package versions. Older versions will be deleted. | No       | `7`                         |
-| `included-tags`    | A comma-separated list of tags to include for deletion. Wildcards (`*`) are supported. | No       | `""` (all tags included)     |
-| `excluded-tags`    | A comma-separated list of tags to exclude from deletion. Wildcards (`*`) are supported.| No       | `""` (no tags excluded)                  |
-| `config-file-path` | The path to the configuration file. `NOT SUPPORTED AT THIS MOMENT`          | No       | `.github/package-cleanup.yml` |
-| `dry-run`          | Enable dry-run mode to preview deletions without making changes.            | No       | `false`                     |
+| Name               | Description                                                                             | Required | Default                       |
+| ------------------ | --------------------------------------------------------------------------------------- | -------- | ----------------------------- |
+| `threshold-days`   | The number of days to keep container package versions. Older versions will be deleted.  | No       | `7`                           |
+| `included-tags`    | A comma-separated list of tags to include for deletion. Wildcards (`*`) are supported.  | No       | `""` (all tags included)      |
+| `excluded-tags`    | A comma-separated list of tags to exclude from deletion. Wildcards (`*`) are supported. | No       | `""` (no tags excluded)       |
+| `config-file-path` | The path to the configuration file. `NOT SUPPORTED AT THIS MOMENT`                      | No       | `.github/package-cleanup.yml` |
+| `dry-run`          | Enable dry-run mode to preview deletions without making changes.                        | No       | `false`                       |
 
 ## 📌 Outputs
 
@@ -37,7 +37,6 @@ This action does not produce any outputs. It performs cleanup operations directl
 > **Note:** The `PACKAGE_TOKEN` must have the following permissions:
 >
 > - **`read:packages`**: To list and retrieve package information.
->
 > - **`delete:packages`**: To delete package versions.
 
 ## Usage Example

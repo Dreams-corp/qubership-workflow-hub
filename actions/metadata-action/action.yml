@@ -1,36 +1,36 @@
 name: "Metadata Action"
 description: ""
 inputs:
-    configuration-path:
-        description: "Path to the configuration file."
-        required: false
-    short-sha:
-        description: "Short SHA deep."
-        default: "7"
-        required: false
+  configuration-path:
+    description: "Path to the configuration file."
+    required: false
+  short-sha:
+    description: "Short SHA deep."
+    default: "7"
+    required: false
 outputs:
-    result:
-        description: "Current timestamp."
-    ref:
-        description: "Current branch or tag ref."
-    ref-name:
-        description: "Current branch or tag name."
-    date:
-        description: "Current date."
-    time:
-        description: "Current time."
-    timestamp:
-        description: "Current timestamp."
-    dist-tag:
-        description: "Current tag."
-    major:
-        description: "Major version."
-    minor:
-        description: "Minor version."
-    patch:
-        description: "Patch version."
-    short-sha:
-        description: "Short SHA."
+  result:
+    description: "Current timestamp."
+  ref:
+    description: "Current branch or tag ref."
+  ref-name:
+    description: "Current branch or tag name."
+  date:
+    description: "Current date."
+  time:
+    description: "Current time."
+  timestamp:
+    description: "Current timestamp."
+  dist-tag:
+    description: "Current tag."
+  major:
+    description: "Major version."
+  minor:
+    description: "Minor version."
+  patch:
+    description: "Patch version."
+  short-sha:
+    description: "Short SHA."
 runs:
   using: "node20"
   main: "dist/index.js"
