@@ -16,16 +16,16 @@ This **Docker Build and Publish** GitHub Action automates the process of buildin
 
 ## 📌 Inputs
 
-| Name               | Description                                                                 | Required | Default                     |
-| ------------------ | --------------------------------------------------------------------------- | -------- | --------------------------- |
-| `ref`              | Branch to create a release from.                                           | No       | `""`                        |
-| `custom-image-name`| Custom name for the Docker image. If not provided, it will be auto-generated. | No       | `""`                        |
-| `context`          | Pipeline context for the Docker build.                                     | No       | `git`                       |
-| `dry-run`          | Run without pushing (dry run).                                             | No       | `false`                     |
-| `download-artifact`| Flag to download the artifact.                                             | No       | `false`                     |
-| `component`        | Component configuration in JSON format (an array with a single object).    | No       | `[{"name": "default", "file": "./Dockerfile", "context": "."}]` |
-| `platforms`        | Platforms for which the Docker image will be built.                       | No       | `linux/amd64`               |
-| `tags`             | Additional Docker image tags. If tags are provided, they will be added to the automatically generated tags. | No       | `""`                        |                     |
+| Name                | Description                                                                                                 | Required | Default                                                         |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- | -------- | --------------------------------------------------------------- | --- |
+| `ref`               | Branch to create a release from.                                                                            | No       | `""`                                                            |
+| `custom-image-name` | Custom name for the Docker image. If not provided, it will be auto-generated.                               | No       | `""`                                                            |
+| `context`           | Pipeline context for the Docker build.                                                                      | No       | `git`                                                           |
+| `dry-run`           | Run without pushing (dry run).                                                                              | No       | `false`                                                         |
+| `download-artifact` | Flag to download the artifact.                                                                              | No       | `false`                                                         |
+| `component`         | Component configuration in JSON format (an array with a single object).                                     | No       | `[{"name": "default", "file": "./Dockerfile", "context": "."}]` |
+| `platforms`         | Platforms for which the Docker image will be built.                                                         | No       | `linux/amd64`                                                   |
+| `tags`              | Additional Docker image tags. If tags are provided, they will be added to the automatically generated tags. | No       | `""`                                                            |     |
 
 ---
 
@@ -61,6 +61,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
+
 ---
 
 ## Additional Information
@@ -88,12 +89,12 @@ The artifact name must match the value provided in the `custom-image-name` input
 The action uses the following logic to determine the final name of the Docker image (`CONTAINER_NAME_RESULT`):
 
 1. **Check if the `custom-image-name` input is provided**:
+
    - If the `custom-image-name` input is specified by the user, it is directly used as the name of the Docker image.
 
 2. **Fallback to the component name**:
    - If `custom-image-name` is not provided, the action calculates the repository name (extracted from the `GITHUB_REPOSITORY` environment variable) and uses it as the Docker image name.
    - If `custom-image-name` is provided and a component file is defined, the names will be taken from the component configuration instead.
-
 
 ### Example Configuration
 
@@ -112,5 +113,6 @@ with:
 ```
 
 In this configuration:
+
 - If `custom-image-name` is left empty, the action will use the `name` field from the `component` configuration (`custom-image-name`) as the Docker image name.
 - If no `component` is provided, the repository name will be used as the fallback.
