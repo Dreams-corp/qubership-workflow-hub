@@ -28,8 +28,8 @@ function extractSemverParts(versionString) {
 }
 
 function matchesPattern(refName, pattern) {
-  const normalizedPattern = pattern.replace(/\//g, '-').replace(/\*/g, '.*');
-  const regex = new RegExp('^' + normalizedPattern + '$');
+  const normalizedPattern = pattern.replace(/\//g, "-").replace(/\*/g, ".*");
+  const regex = new RegExp("^" + normalizedPattern + "$");
   return regex.test(refName);
 }
 
@@ -50,13 +50,19 @@ function fillTemplate(template, values) {
 }
 
 async function run() {
-
-  core.info(`pull_request head.ref: ${github.context.payload.pull_request?.head?.ref}`);
-  core.info(`pull_request head: ${JSON.stringify(github.context.payload.pull_request?.head, null, 2)}`);
-  let name = core.getInput('ref');
+  core.info(
+    `pull_request head.ref: ${github.context.payload.pull_request?.head?.ref}`,
+  );
+  core.info(
+    `pull_request head: ${JSON.stringify(github.context.payload.pull_request?.head, null, 2)}`,
+  );
+  let name = core.getInput("ref");
 
   if (!name) {
-    name = github.context.eventName === 'pull_request' ? github.context.payload.pull_request?.head?.ref : github.context.ref;
+    name =
+      github.context.eventName === "pull_request"
+        ? github.context.payload.pull_request?.head?.ref
+        : github.context.ref;
   }
 
   core.info(`🔹 Ref Original: ${name}`);
@@ -64,14 +70,16 @@ async function run() {
 
   core.info(`🔹 Ref: ${JSON.stringify(ref)}`);
 
-  let defaultTemplate = core.getInput('default-template');
-  let defaultDistributionTag = core.getInput('default-distribution-tag');
+  let defaultTemplate = core.getInput("default-template");
+  let defaultDistributionTag = core.getInput("default-distribution-tag");
 
   let template;
   let distributionTag;
 
   if (!defaultTemplate || defaultTemplate.trim() === "") {
-    const path = core.getInput('configuration-path') || "./.github/metadata-action-config.yml";
+    const path =
+      core.getInput("configuration-path") ||
+      "./.github/metadata-action-config.yml";
     const loader = new ConfigLoader();
     if (loader.fileExists()) {
       const config = loader.load(path);
@@ -80,21 +88,31 @@ async function run() {
     }
   }
   if (!template || template.trim() === "") {
-    core.warning(`💡 No template found for ref: ${ref.name}, using default -> {{ref-name}}-{{timestamp}}-{{runNumber}}`);
+    core.warning(
+      `💡 No template found for ref: ${ref.name}, using default -> {{ref-name}}-{{timestamp}}-{{runNumber}}`,
+    );
     template = `{{ref-name}}-{{timestamp}}-{{runNumber}}`;
   }
   if (!distributionTag || distributionTag.trim() === "") {
-    core.warning(`💡 No dist-tag found for ref: ${ref.name}, using default -> latest`);
+    core.warning(
+      `💡 No dist-tag found for ref: ${ref.name}, using default -> latest`,
+    );
     distributionTag = defaultDistributionTag || "latest";
   }
-  
+
   const parts = generateSnapshotVersionParts();
   const semverParts = extractSemverParts(ref.name);
   const shortShaDeep = core.getInput("short-sha");
   const shortSha = github.context.sha.slice(0, shortShaDeep);
   const values = {
-    ...ref, "ref-name": ref.name, "short-sha": shortSha, ...semverParts,
-    ...parts, ...github.context, "dist-tag": distributionTag, "runNumber": github.context.runId
+    ...ref,
+    "ref-name": ref.name,
+    "short-sha": shortSha,
+    ...semverParts,
+    ...parts,
+    ...github.context,
+    "dist-tag": distributionTag,
+    runNumber: github.context.runId,
   };
 
   core.info(`🔹 time: ${JSON.stringify(parts)}`);
@@ -102,11 +120,11 @@ async function run() {
   core.info(`🔹 dist-tag: ${JSON.stringify(distributionTag)}`);
 
   // core.info(`Values: ${JSON.stringify(values)}`); //debug values
-  let result = fillTemplate(template, values)
+  let result = fillTemplate(template, values);
 
   core.info(`🔹 Template: ${template}`);
 
-  core.info(`🔹 Name: ${ref.name}`)
+  core.info(`🔹 Name: ${ref.name}`);
   core.info(`💡 Rendered template: ${result}`);
 
   core.setOutput("result", result);
@@ -121,7 +139,7 @@ async function run() {
   core.setOutput("tag", distributionTag);
   core.setOutput("short-sha", shortSha);
 
-  core.info('✔️ Action completed successfully!');
+  core.info("✔️ Action completed successfully!");
 }
 
 run();
