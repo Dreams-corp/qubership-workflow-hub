@@ -1,0 +1,17 @@
+---
+
+# Charts release configuration file example
+# This file is used to update the version of the helm charts and images in the values.yaml file
+# It is used in the helm-charts-release action
+# ${release} is replaced with the release version provided in the workflow
+
+charts:
+  - name: module1
+    chart_file: charts/helm/module1/Chart.yaml
+    values_file: charts/helm/module1/values.yaml
+    image:
+      - ghcr.io/netcracker/module1:${release}
+      - ghcr.io/netcracker/module1-service1:${release}
+      - ghcr.io/netcracker/module1-service2:${release}
+      - ghcr.io/netcracker/module1-service3:${release}
+      - ghcr.io/netcracker/module1-service4:${release}
