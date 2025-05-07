@@ -16,31 +16,31 @@ This **GitHub Metadata** GitHub Action extracts metadata from the current GitHub
 
 ## 📌 Inputs
 
-| Name                  | Description                                                                 | Required | Default                                |
-| --------------------- | --------------------------------------------------------------------------- | -------- | -------------------------------------- |
-| `ref`                 | Branch or tag ref. If not provided, it defaults to the current GitHub ref. | No       | `github.context.ref`                  |
-| `configuration-path`  | Path to the configuration file.                                             | No       | `./.github/metadata-action-config.yml` |
-| `default-template`    | Default template to use if no matching template is found in the config.     | No       | `{{ref-name}}-{{timestamp}}-{{runNumber}}` |
-| `default-distribution-tag` | Default distribution tag to use if no matching tag is found in the config. | No       | `latest`                               |
-| `short-sha`           | Length of the short SHA to include in the output.                          | No       | `7`                                    |
+| Name                       | Description                                                                | Required | Default                                    |
+| -------------------------- | -------------------------------------------------------------------------- | -------- | ------------------------------------------ |
+| `ref`                      | Branch or tag ref. If not provided, it defaults to the current GitHub ref. | No       | `github.context.ref`                       |
+| `configuration-path`       | Path to the configuration file.                                            | No       | `./.github/metadata-action-config.yml`     |
+| `default-template`         | Default template to use if no matching template is found in the config.    | No       | `{{ref-name}}-{{timestamp}}-{{runNumber}}` |
+| `default-distribution-tag` | Default distribution tag to use if no matching tag is found in the config. | No       | `latest`                                   |
+| `short-sha`                | Length of the short SHA to include in the output.                          | No       | `7`                                        |
 
 ---
 
 ## 📌 Outputs
 
-| Name        | Description                                                                                     | Example                     |
-| ----------- | ----------------------------------------------------------------------------------------------- | --------------------------- |
-| `result`    | Rendered template with metadata based on template rules.                                        | `v1.2.3-20250313`           |
-| `ref`       | The full GitHub ref (e.g., `refs/heads/main`).                                                  | `refs/heads/main`           |
-| `ref-name`  | The name of the current branch or tag.                                                          | `main`                      |
-| `date`      | Current date in `YYYYMMDD` format.                                                              | `20250313`                  |
-| `time`      | Current time in `HHMMSS` format.                                                                | `235959`                    |
-| `timestamp` | Combined date and time in `YYYYMMDDHHMMSS` format.                                              | `20250313235959`            |
-| `dist-tag`  | Distribution tag based on the branch or tag (e.g., `latest` for main, `beta` for feature branches). | `latest`                    |
-| `major`     | Major version number extracted from semantic versioning.                                        | `1`                         |
-| `minor`     | Minor version number extracted from semantic versioning.                                        | `2`                         |
-| `patch`     | Patch version number extracted from semantic versioning.                                        | `3`                         |
-| `short-sha` | Shortened commit SHA based on the specified length.                                             | `abc1234`                   |
+| Name        | Description                                                                                         | Example           |
+| ----------- | --------------------------------------------------------------------------------------------------- | ----------------- |
+| `result`    | Rendered template with metadata based on template rules.                                            | `v1.2.3-20250313` |
+| `ref`       | The full GitHub ref (e.g., `refs/heads/main`).                                                      | `refs/heads/main` |
+| `ref-name`  | The name of the current branch or tag.                                                              | `main`            |
+| `date`      | Current date in `YYYYMMDD` format.                                                                  | `20250313`        |
+| `time`      | Current time in `HHMMSS` format.                                                                    | `235959`          |
+| `timestamp` | Combined date and time in `YYYYMMDDHHMMSS` format.                                                  | `20250313235959`  |
+| `dist-tag`  | Distribution tag based on the branch or tag (e.g., `latest` for main, `beta` for feature branches). | `latest`          |
+| `major`     | Major version number extracted from semantic versioning.                                            | `1`               |
+| `minor`     | Minor version number extracted from semantic versioning.                                            | `2`               |
+| `patch`     | Patch version number extracted from semantic versioning.                                            | `3`               |
+| `short-sha` | Shortened commit SHA based on the specified length.                                                 | `abc1234`         |
 
 ---
 
@@ -66,9 +66,9 @@ jobs:
       - name: Extract Metadata
         uses: Netcracker/qubership-workflow-hub/actions/metadata-action@main
         with:
-          configuration-path: './.github/metadata-action-config.yml'
-          default-template: '{{ref-name}}-{{timestamp}}'
-          default-distribution-tag: 'latest'
+          configuration-path: "./.github/metadata-action-config.yml"
+          default-template: "{{ref-name}}-{{timestamp}}"
+          default-distribution-tag: "latest"
           short-sha: 8
 ```
 
@@ -118,44 +118,42 @@ The configuration file for this action must adhere to the schema defined [here](
 
 ```json
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Metadata configuration file schema",
-    "type": "object",
-    "properties": {
-        "branches-template": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-                "type": "object",
-                "minProperties": 1,
-                "maxProperties": 1,
-                "patternProperties": {
-                    "^[-a-zA-Z0-9_*]+$": {
-                        "type": "string"
-                    }
-                },
-                "additionalProperties": false
-            }
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Metadata configuration file schema",
+  "type": "object",
+  "properties": {
+    "branches-template": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "minProperties": 1,
+        "maxProperties": 1,
+        "patternProperties": {
+          "^[-a-zA-Z0-9_*]+$": {
+            "type": "string"
+          }
         },
-        "distribution-tags": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-                "type": "object",
-                "minProperties": 1,
-                "maxProperties": 1,
-                "patternProperties": {
-                    "^[-a-zA-Z0-9_*]+$": {
-                        "type": "string"
-                    }
-                },
-                "additionalProperties": false
-            }
-        }
+        "additionalProperties": false
+      }
     },
-    "required": [
-        "branches-template"
-    ],
-    "additionalProperties": false
+    "distribution-tags": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "minProperties": 1,
+        "maxProperties": 1,
+        "patternProperties": {
+          "^[-a-zA-Z0-9_*]+$": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["branches-template"],
+  "additionalProperties": false
 }
 ```
